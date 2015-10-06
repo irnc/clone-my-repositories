@@ -13,7 +13,7 @@ backupDirectory = "~/backups/github/#{time.year}.#{time.month}.#{time.day}"
 #repositories =
 # .map{|r| %Q[#{r[:name]}] }
 #FileUtils.mkdir_p #{backupDirectory}
-YAML.load(open("http://github.com/api/v2/yaml/repos/show/#{username}"))['repositories'].map{|repository|
+YAML.load(open("https://github.com/api/v2/yaml/repos/show/#{username}"))['repositories'].map{|repository|
     puts "discovered repository: #{repository[:name]} ... backing up ..."
     #exec
     system "git clone git@github.com:#{username}/#{repository[:name]}.git #{backupDirectory}/#{repository[:name]}"
