@@ -5,7 +5,7 @@
 require "yaml"
 require "open-uri"
 # your github username
-username = "addyosmani"
+username = "irnc"
 time = Time.new
 # feel free to comment out the option you don't wish to use.
 backupDirectory = "~/backups/github/#{time.year}.#{time.month}.#{time.day}"
