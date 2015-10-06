@@ -8,7 +8,7 @@ require "open-uri"
 username = "addyosmani"
 time = Time.new
 # feel free to comment out the option you don't wish to use.
-backupDirectory = "/backups/github/#{time.year}.#{time.month}.#{time.day}"
+backupDirectory = "~/backups/github/#{time.year}.#{time.month}.#{time.day}"
 #or simply: backupDirectory = "/backups/github/"
 #repositories =
 # .map{|r| %Q[#{r[:name]}] }
