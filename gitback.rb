@@ -2,7 +2,7 @@
 #credits: Walter White, Updates: Addy Osmani
 #!/usr/bin/env ruby
 # dependencies
-require "yaml"
+require "json"
 require "open-uri"
 # your github username
 username = "irnc"
@@ -13,8 +13,9 @@ backupDirectory = "~/backups/github/#{time.year}.#{time.month}.#{time.day}"
 #repositories =
 # .map{|r| %Q[#{r[:name]}] }
 #FileUtils.mkdir_p #{backupDirectory}
-YAML.load(open("https://github.com/api/v2/yaml/repos/show/#{username}"))['repositories'].map{|repository|
-    puts "discovered repository: #{repository[:name]} ... backing up ..."
-    #exec
-    system "git clone git@github.com:#{username}/#{repository[:name]}.git #{backupDirectory}/#{repository[:name]}"
+
+# https://developer.github.com/v3/repos/#list-user-repositories
+JSON.load(open("https://api.github.com/users/#{username}/repos")).map{|repository|
+  puts "discovered repository: #{repository["name"]} ... backing up ..."
+  system "git clone git@github.com:#{username}/#{repository["name"]}.git #{backupDirectory}/#{repository["name"]}"
 }
