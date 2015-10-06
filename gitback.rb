@@ -4,6 +4,7 @@
 # dependencies
 require "json"
 require "open-uri"
+require "uri"
 # your github username
 username = "irnc"
 time = Time.new
@@ -14,11 +15,24 @@ backupDirectory = "~/backups/github/#{time.year}.#{time.month}.#{time.day}"
 # .map{|r| %Q[#{r[:name]}] }
 #FileUtils.mkdir_p #{backupDirectory}
 
-# https://developer.github.com/v3/repos/#list-user-repositories
-repositories = JSON.load(open("https://api.github.com/users/#{username}/repos"))
-repositories.map{|repository|
-  puts "discovered repository: #{repository["name"]} ... backing up ..."
-  system "git clone git@github.com:#{username}/#{repository["name"]}.git #{backupDirectory}/#{repository["name"]}"
-}
+page = 1
+per_page = 30
 
-puts "Total number of received repositories: #{repositories.count}"
+total = 0
+
+loop do
+  # https://developer.github.com/v3/repos/#list-user-repositories
+  params = URI.encode_www_form("page" => page, "per_page" => per_page)
+  repositories = JSON.load(open("https://api.github.com/users/#{username}/repos?#{params}"))
+  repositories.map{|repository|
+    puts "discovered repository: #{repository["name"]} ... backing up ..."
+    system "git clone git@github.com:#{username}/#{repository["name"]}.git #{backupDirectory}/#{repository["name"]}"
+  }
+
+  total += repositories.count
+  page += 1
+
+  break if repositories.count < per_page
+end
+
+puts "Total number of received repositories: #{total}"
