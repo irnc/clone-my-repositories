@@ -15,7 +15,10 @@ backupDirectory = "~/backups/github/#{time.year}.#{time.month}.#{time.day}"
 #FileUtils.mkdir_p #{backupDirectory}
 
 # https://developer.github.com/v3/repos/#list-user-repositories
-JSON.load(open("https://api.github.com/users/#{username}/repos")).map{|repository|
+repositories = JSON.load(open("https://api.github.com/users/#{username}/repos"))
+repositories.map{|repository|
   puts "discovered repository: #{repository["name"]} ... backing up ..."
   system "git clone git@github.com:#{username}/#{repository["name"]}.git #{backupDirectory}/#{repository["name"]}"
 }
+
+puts "Total number of received repositories: #{repositories.count}"
